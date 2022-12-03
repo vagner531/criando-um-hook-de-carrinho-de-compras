@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
-import { Product, Stock } from '../types';
+import { Product } from '../types';
 
 interface CartProviderProps {
   children: ReactNode;
@@ -35,7 +35,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const addProduct = async (productId: number) => {
     try {
       const updatedCart = [...cart];
-      const productExists = updatedCart.find(productId => product.id === productId);
+      const productExists = updatedCart.find(product => product.id === productId);
 
       const stock = await api.get(`/stock/${productId}`);
 
@@ -51,7 +51,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       if (productExists) {
         productExists.amount = amount;
       }else {
-        const product = await api.get('/products/${productId}');
+        const product = await api.get(`/products/${productId}`);
 
         const newProduct = {
           ...product.data,
